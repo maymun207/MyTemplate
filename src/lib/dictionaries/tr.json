@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
+    "caseStudies": "Vaka Çalışmaları",
+    "careers": "Kariyer",
+    "contact": "İletişim"
+  },
+  "hero": {
+    "title": "Yapay Zeka Destekli Dijital Dönüşüm",
+    "subtitle": "Endüstriyel işletmeleri kalite kontrol, süreç optimizasyonu ve dijital dönüşüm için en ileri yapay zeka çözümleriyle güçlendiriyoruz.",
+    "cta": "Başlayın"
+  },
+  "about": {
+    "title": "ASTROTECH Hakkında",
+    "description": "Türkiye ve ötesinde endüstriyel işletmeler için yapay zeka destekli dijital dönüşüm çözümleri sunuyoruz."
+  },
+  "footer": {
+    "copyright": "© 2025 ASTROTECH. Tüm hakları saklıdır.",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Kullanım Koşulları"
+  },
+  "caseStudies": {
+    "title": "Vaka Çalışmaları",
+    "subtitle": "Çözümlerimizin gerçek sonuçları nasıl sağladığını görün",
+    "viewAll": "Tüm Vaka Çalışmalarını Görün"
+  },
+  "careers": {
+    "title": "Kariyer",
+    "subtitle": "Ekibimize katılın ve endüstriyel yapay zekanın geleceğini şekillendirin",
+    "openPositions": "Açık Pozisyonlar",
+    "applyNow": "Şimdi Başvurun"
+  },
+  "contact": {
+    "title": "İletişim",
+    "subtitle": "Ekibimizle iletişime geçin",
+    "name": "İsim",
+    "email": "E-posta",
+    "message": "Mesaj",
+    "send": "Mesaj Gönder",
+    "success": "Mesajınız başarıyla gönderildi!",
+    "error": "Bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "roi": {
+    "title": "ROI Hesaplayıcı",
+    "subtitle": "Yapay zeka dönüşümünüz için yatırım getirisini hesaplayın",
+    "calculate": "ROI Hesapla"
+  },
+  "notFound": {
+    "title": "Sayfa Bulunamadı",
+    "description": "Aradığınız sayfa mevcut değil.",
+    "backHome": "Ana Sayfaya Dön"
+  }
+}

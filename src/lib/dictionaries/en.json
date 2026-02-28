@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "caseStudies": "Case Studies",
+    "careers": "Careers",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "AI-Powered Digital Transformation",
+    "subtitle": "Empowering industrial enterprises with cutting-edge AI solutions for quality control, process optimization, and digital transformation.",
+    "cta": "Get Started"
+  },
+  "about": {
+    "title": "About ASTROTECH",
+    "description": "We deliver AI-powered solutions for Everybody."
+  },
+  "footer": {
+    "copyright": "© 2025 ASTROTECH. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "caseStudies": {
+    "title": "Case Studies",
+    "subtitle": "See how our solutions drive real results",
+    "viewAll": "View All Case Studies"
+  },
+  "careers": {
+    "title": "Careers",
+    "subtitle": "Join our team and shape the future of industrial AI",
+    "openPositions": "Open Positions",
+    "applyNow": "Apply Now"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our team",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send Message",
+    "success": "Your message has been sent successfully!",
+    "error": "An error occurred. Please try again."
+  },
+  "roi": {
+    "title": "ROI Calculator",
+    "subtitle": "Calculate the return on investment for your AI transformation",
+    "calculate": "Calculate ROI"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist.",
+    "backHome": "Go Back Home"
+  }
+}
