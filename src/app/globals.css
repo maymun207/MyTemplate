@@ -1,55 +1,208 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1e3a8a;
-  --color-secondary: #f97316;
-  --color-accent: #00d1ff;
-  --font-heading: "Inter", sans-serif;
-  --font-body: "Source Sans 3", sans-serif;
+  /* ─── Base Colors (overridden by time theme) ─── */
+  --color-primary: #8B5CF6;
+  --color-secondary: #FFD700;
+  --color-accent: #06B6D4;
+
+  /* ─── Fonts ─── */
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Inter", sans-serif;
 }
 
-/* Base styles */
+/* ═════════════════════════════════════════════
+   TIME-OF-DAY THEMES
+   ═════════════════════════════════════════════ */
+
+/* ☀️ Morning — 6 AM to 11 AM */
+html[data-time-theme="morning"] {
+  --bg-primary: #FFFBF0;
+  --bg-secondary: #FFF8E7;
+  --bg-surface: #FFF3D6;
+  --bg-border: #E8D5B0;
+  --text-primary: #2D1B00;
+  --text-secondary: #6B5335;
+  --text-muted: #9C8A72;
+  --glass-bg: rgba(255, 248, 231, 0.7);
+  --hero-gradient: linear-gradient(135deg, #FFFBF0 0%, #FFE8B0 40%, #FFF3D6 70%, #FFFBF0 100%);
+  --card-glow: rgba(255, 215, 0, 0.08);
+}
+
+/* ☁️ Afternoon — 11 AM to 5 PM */
+html[data-time-theme="afternoon"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-surface: #F1F5F9;
+  --bg-border: #E2E8F0;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --glass-bg: rgba(241, 245, 249, 0.7);
+  --hero-gradient: linear-gradient(135deg, #FFFFFF 0%, #EEF2FF 40%, #F8FAFC 70%, #FFFFFF 100%);
+  --card-glow: rgba(139, 92, 246, 0.06);
+}
+
+/* 🌅 Sunset — 5 PM to 8 PM */
+html[data-time-theme="sunset"] {
+  --bg-primary: #FFF7ED;
+  --bg-secondary: #FFEDD5;
+  --bg-surface: #FEE2C5;
+  --bg-border: #E8C9A0;
+  --text-primary: #431407;
+  --text-secondary: #7C4A1D;
+  --text-muted: #B07D4F;
+  --glass-bg: rgba(255, 237, 213, 0.7);
+  --hero-gradient: linear-gradient(135deg, #FFF7ED 0%, #FDDCB5 40%, #FECDA1 70%, #FFF7ED 100%);
+  --card-glow: rgba(249, 115, 22, 0.08);
+}
+
+/* 🌙 Night — 8 PM to 6 AM */
+html[data-time-theme="night"] {
+  --bg-primary: #0a0014;
+  --bg-secondary: #1a0a2e;
+  --bg-surface: #1e1035;
+  --bg-border: #2d1b4e;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0c0;
+  --text-muted: #6b6b8d;
+  --glass-bg: rgba(30, 16, 53, 0.6);
+  --hero-gradient: linear-gradient(135deg, #0a0014 0%, #1a0a2e 40%, #0d0520 70%, #0a0014 100%);
+  --card-glow: rgba(255, 215, 0, 0.06);
+}
+
+/* Default fallback (afternoon) */
+html:not([data-time-theme]) {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-surface: #F1F5F9;
+  --bg-border: #E2E8F0;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --glass-bg: rgba(241, 245, 249, 0.7);
+  --hero-gradient: linear-gradient(135deg, #FFFFFF 0%, #EEF2FF 40%, #F8FAFC 70%, #FFFFFF 100%);
+  --card-glow: rgba(139, 92, 246, 0.06);
+}
+
+/* ═════════════════════════════════════════════
+   BASE STYLES
+   ═════════════════════════════════════════════ */
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-body);
-  background-color: #000000;
-  color: #ffffff;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color 1.5s ease, color 1.5s ease;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Custom scrollbar */
+/* ─── Hero Background ─── */
+.bg-hero {
+  background: var(--hero-gradient);
+  transition: background 1.5s ease;
+}
+
+/* ─── Glass Card ─── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--bg-border);
+  border-radius: 1rem;
+  transition: background 1.5s ease, border-color 1.5s ease;
+}
+
+/* ─── Glow Effects ─── */
+.glow-gold {
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2), 0 0 60px rgba(255, 215, 0, 0.05);
+}
+.glow-violet {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), 0 0 60px rgba(139, 92, 246, 0.05);
+}
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 60px rgba(6, 182, 212, 0.05);
+}
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* ─── Animations ─── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-spin-slow {
+  animation: spin-slow 60s linear infinite;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: var(--bg-primary);
 }
-
 ::-webkit-scrollbar-thumb {
   background: var(--color-primary);
-  border-radius: 4px;
+  border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent);
 }
 
-/* Selection */
+/* ─── Selection ─── */
 ::selection {
   background-color: var(--color-primary);
   color: #ffffff;
+}
+
+/* ─── Section Spacing ─── */
+.section-padding {
+  padding: 5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 6rem 2rem;
+  }
+}
+
+/* ─── Page Layout (agent panel support) ─── */
+.page-content {
+  transition: margin-right 0.3s ease;
+}
+body.agent-panel-open .page-content {
+  margin-right: var(--agent-width, 380px);
 }

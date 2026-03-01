@@ -1,0 +1,182 @@
+// ✦ AstroYou — Personal Oracle & Energy System
+// Database: SQLite (local dev) → PostgreSQL (Supabase production)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── USERS ───────────────────────────────────────────────────
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  passwordHash   String   @map("password_hash")
+  name           String?
+  locale         String   @default("tr") // "en" | "tr"
+  tier           String   @default("free") // "free" | "premium"
+  birthTimeKnown Boolean  @default(true) @map("birth_time_known")
+  createdAt      DateTime @default(now()) @map("created_at")
+  lastLogin      DateTime? @map("last_login")
+
+  preferences   UserPreferences?
+  natalCharts   NatalChart[]
+  subscriptions Subscription[]
+  outcomeLogs   OutcomeLog[]
+
+  @@map("users")
+}
+
+// ─── USER PREFERENCES ───────────────────────────────────────
+model UserPreferences {
+  id                   String  @id @default(uuid())
+  userId               String  @unique @map("user_id")
+  notificationsEnabled Boolean @default(false) @map("notifications_enabled")
+  pwaInstalled         Boolean @default(false) @map("pwa_installed")
+  timezone             String  @default("Europe/Istanbul")
+  displaySettings      String  @default("{}") @map("display_settings") // JSON string
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+// ─── NATAL CHARTS ────────────────────────────────────────────
+model NatalChart {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  birthDatetime   DateTime @map("birth_datetime")
+  birthCity       String   @map("birth_city")
+  birthLat        Float    @map("birth_lat")
+  birthLng        Float    @map("birth_lng")
+  westernData     String   @default("{}") @map("western_data") // JSON: planets, houses, aspects
+  vedicData       String   @default("{}") @map("vedic_data") // JSON: nakshatras, dashas, yogas
+  chineseData     String   @default("{}") @map("chinese_data") // JSON: element, animal, pillars
+  timeApproximate Boolean  @default(false) @map("time_approximate")
+  calculatedAt    DateTime @default(now()) @map("calculated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyOracles DailyOracle[]
+
+  @@map("natal_charts")
+}
+
+// ─── DAILY ORACLES ───────────────────────────────────────────
+model DailyOracle {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  natalChartId      String   @map("natal_chart_id")
+  oracleDate        DateTime @map("oracle_date")
+  dailyTheme        String   @map("daily_theme")
+  scenarios         String   @default("[]") @map("scenarios") // JSON: Best/Typical/Challenge
+  guidanceMessage   String   @map("guidance_message")
+  challengeReading  String?  @map("challenge_reading")
+  astroCardUrl      String?  @map("astro_card_url") // nanobanana generated
+  synthesisSummary  String?  @map("synthesis_summary")
+  generatedAt       DateTime @default(now()) @map("generated_at")
+
+  natalChart    NatalChart     @relation(fields: [natalChartId], references: [id], onDelete: Cascade)
+  agentSignals  AgentSignal[]
+  energyEntries EnergyEntry[]
+  timingWindows TimingWindow[]
+  rituals       Ritual[]
+  outcomeLogs   OutcomeLog[]
+
+  @@unique([userId, oracleDate])
+  @@map("daily_oracles")
+}
+
+// ─── AGENT SIGNALS ───────────────────────────────────────────
+model AgentSignal {
+  id              String   @id @default(uuid())
+  dailyOracleId   String   @map("daily_oracle_id")
+  agentType       String   @map("agent_type") // "western" | "vedic" | "chinese"
+  rawSignal       String   @default("{}") @map("raw_signal") // JSON: individual reading
+  confidenceScore Float    @default(0.0) @map("confidence_score")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  dailyOracle DailyOracle @relation(fields: [dailyOracleId], references: [id], onDelete: Cascade)
+
+  @@map("agent_signals")
+}
+
+// ─── ENERGY CALENDAR ENTRIES ─────────────────────────────────
+model EnergyEntry {
+  id            String @id @default(uuid())
+  dailyOracleId String @map("daily_oracle_id")
+  zone          String // "career" | "love" | "health" | "finance" | "creativity" | "spiritual"
+  intensity     Float  @default(0.5) // 0.0 - 1.0
+  explanation   String
+
+  dailyOracle DailyOracle @relation(fields: [dailyOracleId], references: [id], onDelete: Cascade)
+
+  @@map("energy_entries")
+}
+
+// ─── TIMING WINDOWS ─────────────────────────────────────────
+model TimingWindow {
+  id            String   @id @default(uuid())
+  dailyOracleId String   @map("daily_oracle_id")
+  windowStart   DateTime @map("window_start")
+  windowEnd     DateTime @map("window_end")
+  category      String   // "power" | "caution" | "neutral"
+  description   String
+  alarmSent     Boolean  @default(false) @map("alarm_sent")
+
+  dailyOracle DailyOracle @relation(fields: [dailyOracleId], references: [id], onDelete: Cascade)
+
+  @@map("timing_windows")
+}
+
+// ─── RITUALS ─────────────────────────────────────────────────
+model Ritual {
+  id              String @id @default(uuid())
+  dailyOracleId   String @map("daily_oracle_id")
+  ritualType      String @map("ritual_type") // "morning" | "evening" | "special"
+  sourceSystem    String @map("source_system") // "synthesis"
+  title           String
+  description     String
+  instructions    String
+  durationMinutes Int    @default(2) @map("duration_minutes")
+  isPremium       Boolean @default(false) @map("is_premium")
+
+  dailyOracle DailyOracle @relation(fields: [dailyOracleId], references: [id], onDelete: Cascade)
+
+  @@map("rituals")
+}
+
+// ─── OUTCOME LOGS (Quantum Mirror) ──────────────────────────
+model OutcomeLog {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  dailyOracleId String?  @map("daily_oracle_id")
+  logDate       DateTime @map("log_date")
+  energyScore   Int?     @map("energy_score") // 1-10
+  moodScore     Int?     @map("mood_score") // 1-10
+  eventCategory String?  @map("event_category") // "work" | "relationship" | "health" | ...
+  freeText      String?  @map("free_text")
+  loggedAt      DateTime @default(now()) @map("logged_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyOracle DailyOracle? @relation(fields: [dailyOracleId], references: [id], onDelete: SetNull)
+
+  @@map("outcome_logs")
+}
+
+// ─── SUBSCRIPTIONS ───────────────────────────────────────────
+model Subscription {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  plan            String    @default("free") // "free" | "monthly" | "annual"
+  status          String    @default("active") // "active" | "cancelled" | "expired"
+  startsAt        DateTime? @map("starts_at")
+  endsAt          DateTime? @map("ends_at")
+  paymentProvider String?   @map("payment_provider")
+  paymentId       String?   @map("payment_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
