@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@prisma/client": "^7.4.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.34.3",
     "googleapis": "^171.4.0",
@@ -22,7 +23,6 @@
     "unpdf": "^1.4.0"
   },
   "devDependencies": {
-    "@prisma/client": "^7.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.11",
